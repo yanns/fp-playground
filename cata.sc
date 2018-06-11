@@ -1,5 +1,7 @@
-import scala.language.higherKinds
 // https://www.youtube.com/watch?reload=9&v=XZ9nPZbaYfE
+// http://slides.com/zainabali_/peeling_the_banana#/
+
+import scala.language.higherKinds
 
 // recursive data structure
 sealed trait List
@@ -134,7 +136,7 @@ factorial2(4)
 
 // avoid writing in and out by hand with Fix
 
-case class Fix[F[_]](unfix: F[Fix[F]]) extends ListF[F[_]]
+case class Fix[F[_]](unfix: F[Fix[F]])
 
 def in3: ListF[Fix[ListF]] ⇒ Fix[ListF] = Fix(_)
 def out3: Fix[ListF] ⇒ ListF[Fix[ListF]] = _.unfix
@@ -143,4 +145,4 @@ def out3: Fix[ListF] ⇒ ListF[Fix[ListF]] = _.unfix
 in3(ConsF(3, Fix(NilF())))
 
 // I don't understand how it helps
-// def range2: Int => List = ana(rangeCoalgebra, in3) cannot compile
+// def range2: Int => List = ana(rangeCoalgebra, in3) //cannot compile
