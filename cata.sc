@@ -78,8 +78,10 @@ val multiplyAlgebra: Algebra[ListF, Int] = {
 
 // cata = out -> map cata -> alg
 def cata[F[_], R, A](algebra: F[A] ⇒ A, out: R ⇒ F[R])(r: R)(implicit F: Functor[F]): A = {
-  val f: R ⇒ A = cata(algebra, out)
-  algebra(F.map(f)(out(r)))
+  val FR = out(r)
+  val mapCata: R ⇒ A = cata(algebra, out)
+  val FA = F.map(mapCata)(FR)
+  algebra(FA)
 }
 
 
