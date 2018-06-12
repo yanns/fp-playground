@@ -134,7 +134,7 @@ def hylo[F[_], A, B](coalgebra: Coalgebra[F, A], algebra: Algebra[F, B])
 def factorial2: Int ⇒ Int = hylo(rangeCoalgebra, multiplyAlgebra)
 factorial2(4)
 
-// avoid writing in and out by hand with Fix
+// avoid writing in and out by hand with Fix?
 
 case class Fix[F[_]](unfix: F[Fix[F]])
 
@@ -143,6 +143,7 @@ def out3: Fix[ListF] ⇒ ListF[Fix[ListF]] = _.unfix
 
 
 in3(ConsF(3, Fix(NilF())))
+in3(ConsF(3, Fix(NilF[Fix[ListF]]())))
 
-// I don't understand how it helps
-// def range2: Int => List = ana(rangeCoalgebra, in3) //cannot compile
+def range3: Int => Fix[ListF] = ana(rangeCoalgebra, in3)
+range3(5)
